@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\City;
 use App\Customer;
+use App\Http\Requests\CustomerFormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -25,7 +26,7 @@ class CustomerController extends Controller
         return view('customers.create', compact('cities'));
     }
 
-    public function store(Request $request)
+    public function store(CustomerFormRequest $request)
     {
         $customer = new Customer();
         $customer->name = $request->name;
@@ -46,7 +47,7 @@ class CustomerController extends Controller
         return view('customers.edit', compact('customer', 'cities'));
     }
 
-    public function update(Request $request, $id)
+    public function update(CustomerFormRequest $request, $id)
     {
         $customer = Customer::findOrFail($id);
         $customer->name = $request->name;
@@ -79,7 +80,7 @@ class CustomerController extends Controller
         return view('customers.list', compact('customers', 'cities', 'totalCustomerFilter', 'cityFilter'));
     }
 
-    public function search(Request $request)
+    public function search(CustomerFormRequest $request)
     {
         $keyword = $request->keyword;
         if (!$keyword){

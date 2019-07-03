@@ -12,15 +12,24 @@
                     @csrf
                     <div class="form-group">
                         <label>Tên khách hàng</label>
-                        <input type="text" class="form-control" name="name"  placeholder="Enter name" required>
+                        <input type="text" class="form-control" name="name"  placeholder="Enter name">
+                        @if($errors->has('name'))
+                            <p class="text-danger">{{$errors->first('name')}}</p>
+                            @endif
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email</label>
-                        <input type="email" class="form-control" name="email" placeholder="Enter email" required>
+                        <input type="text" class="form-control" name="email" placeholder="Enter email">
+                        @if($errors->has('email'))
+                            <p class="text-danger">{{$errors->first('email')}}</p>
+                        @endif
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Ngày sinh</label>
-                        <input type="date" class="form-control" name="dob" required>
+                        <input type="date" class="form-control" name="dob">
+                        @if($errors->has('dob'))
+                            <p class="text-danger">{{$errors->first('dob')}}</p>
+                        @endif
                     </div>
                     <div class="form-group">
                         <label>Tỉnh thành</label>
