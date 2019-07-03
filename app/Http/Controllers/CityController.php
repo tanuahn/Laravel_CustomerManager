@@ -10,6 +10,7 @@ class CityController extends Controller
     public function index()
     {
         $cities = City::all();
+
         return view('cities.list', compact('cities'));
     }
 
@@ -23,20 +24,23 @@ class CityController extends Controller
         $city = new City();
         $city->name = $request->name;
         $city->save();
-        return redirect()->route('customers.index');
+        return redirect()->route('cities.index');
     }
 
     public function edit($id)
     {
         $city = City::findOrFail($id);
+
         return view('cities.edit', compact('city'));
     }
 
     public function destroy($id)
     {
         $city = City::findOrFail($id);
-        $city->customer->delete();
+//        dd($city->customers);
+        $city->customers()->delete();
         $city->delete();
+
         return redirect()->route('cities.index');
     }
 }

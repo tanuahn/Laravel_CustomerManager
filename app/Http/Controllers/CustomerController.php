@@ -14,12 +14,14 @@ class CustomerController extends Controller
     {
         $customers = Customer::paginate(10);
         $cities = City::all();
+
         return view('customers.list', compact('customers', 'cities'));
     }
 
     public function create()
     {
         $cities = City::all();
+
         return view('customers.create', compact('cities'));
     }
 
@@ -40,6 +42,7 @@ class CustomerController extends Controller
     {
         $customer = Customer::findOrFail($id);
         $cities = City::all();
+
         return view('customers.edit', compact('customer', 'cities'));
     }
 
@@ -69,9 +72,23 @@ class CustomerController extends Controller
     {
         $idCity = $request->city_id;
         $cityFilter = City::findOrFail($idCity);
-        $customers = Customer::where('city_id', $cityFilter->id)->get();
+        $customers = Customer::where('city_id', $cityFilter->id)->paginate(5);
         $totalCustomerFilter = count($customers);
         $cities = City::all();
+
         return view('customers.list', compact('customers', 'cities', 'totalCustomerFilter', 'cityFilter'));
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->keyword;
+        if (!$keyword){
+            return redirect()->route('customers.index');
+        } else {
+            $customers = Customer::where('name', 'LIKE', '%' . $keyword . '%')->paginate(5);
+        }
+        $cities = City::all();
+
+        return view('customers.list', compact('customers', 'cities'));
     }
 }
