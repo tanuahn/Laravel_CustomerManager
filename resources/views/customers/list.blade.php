@@ -48,6 +48,8 @@
                     <th scope="col">Ngày Sinh</th>
                     <th scope="col">Email</th>
                     <th scope="col">Tỉnh Thành</th>
+                    <th scope="col">Ảnh đại diện</th>
+                    <th scope="col">Action</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -69,6 +71,9 @@
                             @else
                                 <td>Không có thông tin</td>
                             @endif
+                            <td>
+                                <img src="{{ asset('storage/'.$customer->image) }}" alt="" style="width: 75px">
+                            </td>
                             <td><a href="{{ route('customers.edit', $customer->id) }}">sửa</a></td>
                             <td><a href="{{ route('customers.destroy', $customer->id) }}" class="text-danger"
                                    onclick="return confirm('Bạn chắc chắn muốn xóa?')">xóa</a></td>
@@ -122,4 +127,5 @@
                 </div>
             </div>
         </div>
+    </div>
 @endsection

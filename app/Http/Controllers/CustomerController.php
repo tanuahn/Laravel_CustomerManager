@@ -4,16 +4,18 @@ namespace App\Http\Controllers;
 
 use App\City;
 use App\Customer;
-use App\Http\Requests\CustomerFormRequest;
+use App\Http\Requests\CreateCustomerRequest;
+use App\Http\Requests\EditCustomerRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class CustomerController extends Controller
 {
     public function index()
     {
-        $customers = Customer::paginate(10);
+        $customers = Customer::paginate(5);
         $cities = City::all();
 
         return view('customers.list', compact('customers', 'cities'));
@@ -26,13 +28,18 @@ class CustomerController extends Controller
         return view('customers.create', compact('cities'));
     }
 
-    public function store(CustomerFormRequest $request)
+    public function store(CreateCustomerRequest $request)
     {
         $customer = new Customer();
         $customer->name = $request->name;
         $customer->email = $request->email;
         $customer->dob = $request->dob;
         $customer->city_id = $request->city_id;
+        if ($request->hasFile('image')) {
+            $image = $request->image;
+            $path = $image->store('images', 'public');
+            $customer->image = $path;
+        }
         $customer->save();
 
         Session::flash('success', 'Tao moi khach hang thanh cong');
@@ -47,13 +54,18 @@ class CustomerController extends Controller
         return view('customers.edit', compact('customer', 'cities'));
     }
 
-    public function update(CustomerFormRequest $request, $id)
+    public function update(EditCustomerRequest $request, $id)
     {
         $customer = Customer::findOrFail($id);
         $customer->name = $request->name;
         $customer->email = $request->email;
         $customer->dob = $request->dob;
         $customer->city_id = $request->city_id;
+        if ($request->hasFile('image')) {
+            $image = $request->image;
+            $path = $image->store('images', 'public');
+            $customer->image = $path;
+        }
         $customer->save();
 
         Session::flash('success', 'Cap nhat khach hang thanh cong');
@@ -80,7 +92,7 @@ class CustomerController extends Controller
         return view('customers.list', compact('customers', 'cities', 'totalCustomerFilter', 'cityFilter'));
     }
 
-    public function search(CustomerFormRequest $request)
+    public function search(Request $request)
     {
         $keyword = $request->keyword;
         if (!$keyword){

@@ -8,7 +8,7 @@
                 <h1>Thêm mới khách hàng</h1>
             </div>
             <div class="col-12">
-                <form method="post" action="{{ route('customers.store') }}">
+                <form method="post" action="{{ route('customers.store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label>Tên khách hàng</label>
@@ -38,6 +38,13 @@
                                 <option value="{{ $city->id }}">{{ $city->name }}</option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputFileName">Ảnh đại diện</label>
+                        <input type="file" name="image">
+                        @if($errors->has('image'))
+                            <p class="text-danger">{{$errors->first('image')}}</p>
+                        @endif
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <button class="btn btn-secondary" onclick="window.history.go(-1); return false;">Hủy</button>
